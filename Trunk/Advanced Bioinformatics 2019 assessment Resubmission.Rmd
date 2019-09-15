@@ -1,38 +1,36 @@
 ---
 output:
   word_document: default
-  html_document: default
+  html_document:
+    keep_md: yes
   pdf_document: default
 ---
 ---
-title: "Advanced Bioinformatics 2019 assessment"
-author: "Candidate number 8941"
-date: "15/06/2019"
-output: html_document
+#Advanced Bioinformatics 2019 assessment
+###Candidate number 8941
+
+15/09/2019
 
 
-##Task 1
+####Task 1
 ```{r sum}
 sum(5:55)
 ```
 
-##Task 2
+####Task 2
 ```{r sumfun}
 
-n=10
-sumfun<- sum(5:n)
-sumfun
+sumfun <- function(n){return (sum (5:n)) }
 
-n=20
-sumfun<- sum(5:n)
-sumfun
+sumfun(10)
 
-n=100
-sumfun<- sum(5:n)
-sumfun
+sumfun(20)
+
+sumfun(100)
 ```
 
-##Task 3
+
+####Task 3
 ```{r first 12 entries of Fibonacci series}
 
 Fibonacci <- numeric(12)
@@ -42,56 +40,55 @@ print(Fibonacci)
 
 ```
 
-##Task 4
+####Task 4
 ```{r box plot of mtcars}
 library(ggplot2)
 str(mtcars)
-ggplot(mtcars, aes(x = as.factor(gear), y = mpg, fill = gear))+
+ggplot(mtcars, aes(x = as.factor(gear), y = mpg, fill = as.factor(gear)))+
   geom_point()+
   geom_boxplot()+
-  labs(x='number of gears', y='miles per gallon', title='mtcars box plot')
+  labs(x='number of gears', y='miles per gallon', title='mtcars mpg by number of gears')
 ```
 
 ```{r}
 #with a small amount of random variation added to the points because of small dataset
 library(ggplot2)
-ggplot(mtcars, aes(x = as.factor(gear), y = mpg, fill = gear))+
+ggplot(mtcars, aes(x = as.factor(gear), y = mpg, fill = as.factor(gear)))+
   geom_point()+
   geom_boxplot()+
   geom_jitter()+
-  labs(x='number of gears', y='miles per gallon', title='mtcars box plot (some random variation to points added)')
+  labs(x='number of gears', y='miles per gallon', title='mtcars mpg by number of gears (some random variation to points added)')
 ```
 
-##Task 5
+####Task 5
 ```{r fitting linear relationships}
 str(cars)
 summary(cars)
 
 # Model1
-#variable speed centered around its mean to avoid nonesense negative values
+#variable speed centered around its mean (using generic scale funcion) to avoid nonesense negative values
 set.seed(1)
 speed.c = scale(cars$speed, center = TRUE, scale = FALSE)
 model1 = lm(formula = dist~speed.c, data = cars)
 summary(model1)
 ```
-##### fitted slope in Model1 is 3.932 feet with standard deviation of 0.415
-##### intercept of the line is 42.98 feet with standard deviation of 2.175
+##### fitted slope in Model1 is 3.932 with standard deviation of 0.415
+##### intercept of the line is 42.98 with standard deviation of 2.175
 
 ```{r}
 # Model2 
 #optimisation with log transformation of variable distance
-#variable speed centered around its mean to avoid nonesense negative values
 set.seed(1)
 speed.c = scale(cars$speed, center = TRUE, scale = FALSE)
-model2 = lm(formular = log(dist)~speed.c, data = cars)
+model2 = lm(formula = log(dist)~speed.c, data = cars)
 summary(model2)
 ```
-##### fitted slope in Model2 is 0.1656 with standard deviation of 0.0175
-##### intercept of the line is 8.28 with standard deviation of 0.874
+##### fitted slope in Model2 is 0.120 with standard deviation of 0.012
+##### intercept of the line is 3.535 with standard deviation of 0.063
 
 
 
-##Task 6
+####Task 6
 ```{r ggplot of data in task 5}
 # Model1 plot
 library(ggplot2)
@@ -112,7 +109,7 @@ ggplot(cars, aes(x = speed, y = log(dist)) )+
 
 
 
-Task 7
+####Task 7
 ```{r finding reaction time with linear regression}
 library(dplyr)
 #manipulating data in cars to create new columns with speed in miles per second and stopping distance in miles
@@ -120,19 +117,24 @@ carsM <- mutate (cars, speedM = speed/3600, distM = dist/5280)
 str(carsM)
 ```
 ```{r}
-#now doing linear regression with new data to relate stopping distance to square of speed
+#now doing linear regression with new data to relate stopping distance to speed and square of speed
 set.seed(1)
-model3 = lm(formula = distM~I(speedM^2), data = carsM)
+model3 = lm(formula = distM~0 + speedM + I(speedM^2), data = carsM)
 summary(model3)
 
 ```
+
+####the estimated average reaction time which appears reasonable is 0.8448 seconds
+
+
 ```{r}
 #ggplot of data points and fitted reltionship is model3 plot
+
 library(ggplot2)
-ggplot(carsM, aes(x = speedM^2, y = distM))+
+ggplot(carsM, aes(x = speedM, y = distM))+
   geom_point()+
-  labs(x='Speed in miles per second squared', y='Stopping distance in miles', title='Plot of Model3 linear fit')+
-  stat_smooth(method = lm, se = FALSE)
+  geom_smooth (method="lm", formula = "y~0+x+I(x^2)")+
+  labs(x='Speed in miles per second', y='Stopping distance in miles', title='Plot of Model3 fitted relatioship')
 ```
 
 

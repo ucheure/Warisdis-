@@ -1,17 +1,18 @@
 ---
 output:
-  html_document: 
+  html_document:
     keep_md: yes
   word_document: default
+  pdf_document: default
 ---
 ---
-title: "Advanced Bioinformatics 2019 assessment"
-author: "Candidate number 8941"
-date: "15/06/2019"
-output: html_document
+#Advanced Bioinformatics 2019 assessment
+###Candidate number 8941
+
+15/09/2019
 
 
-##Task 1
+####Task 1
 
 ```r
 sum(5:55)
@@ -21,12 +22,12 @@ sum(5:55)
 ## [1] 1530
 ```
 
-##Task 2
+####Task 2
 
 ```r
-n=10
-sumfun<- sum(5:n)
-sumfun
+sumfun <- function(n){return (sum (5:n)) }
+
+sumfun(10)
 ```
 
 ```
@@ -34,9 +35,7 @@ sumfun
 ```
 
 ```r
-n=20
-sumfun<- sum(5:n)
-sumfun
+sumfun(20)
 ```
 
 ```
@@ -44,16 +43,15 @@ sumfun
 ```
 
 ```r
-n=100
-sumfun<- sum(5:n)
-sumfun
+sumfun(100)
 ```
 
 ```
 ## [1] 5040
 ```
 
-##Task 3
+
+####Task 3
 
 ```r
 Fibonacci <- numeric(12)
@@ -66,7 +64,7 @@ print(Fibonacci)
 ##  [1]   1   1   2   3   5   8  13  21  34  55  89 144
 ```
 
-##Task 4
+####Task 4
 
 ```r
 library(ggplot2)
@@ -89,28 +87,28 @@ str(mtcars)
 ```
 
 ```r
-ggplot(mtcars, aes(x = as.factor(gear), y = mpg, fill = gear))+
+ggplot(mtcars, aes(x = as.factor(gear), y = mpg, fill = as.factor(gear)))+
   geom_point()+
   geom_boxplot()+
-  labs(x='number of gears', y='miles per gallon', title='mtcars box plot')
+  labs(x='number of gears', y='miles per gallon', title='mtcars mpg by number of gears')
 ```
 
-![](Advanced_Bioinformatics_2019_assessment_files/figure-html/box plot of mtcars-1.png)<!-- -->
+![](Advanced_Bioinformatics_2019_assessment_Resubmission_files/figure-html/box plot of mtcars-1.png)<!-- -->
 
 
 ```r
 #with a small amount of random variation added to the points because of small dataset
 library(ggplot2)
-ggplot(mtcars, aes(x = as.factor(gear), y = mpg, fill = gear))+
+ggplot(mtcars, aes(x = as.factor(gear), y = mpg, fill = as.factor(gear)))+
   geom_point()+
   geom_boxplot()+
   geom_jitter()+
-  labs(x='number of gears', y='miles per gallon', title='mtcars box plot (some random variation to points added)')
+  labs(x='number of gears', y='miles per gallon', title='mtcars mpg by number of gears (some random variation to points added)')
 ```
 
-![](Advanced_Bioinformatics_2019_assessment_files/figure-html/unnamed-chunk-1-1.png)<!-- -->
+![](Advanced_Bioinformatics_2019_assessment_Resubmission_files/figure-html/unnamed-chunk-1-1.png)<!-- -->
 
-##Task 5
+####Task 5
 
 ```r
 str(cars)
@@ -138,7 +136,7 @@ summary(cars)
 
 ```r
 # Model1
-#variable speed centered around its mean to avoid nonesense negative values
+#variable speed centered around its mean (using generic scale funcion) to avoid nonesense negative values
 set.seed(1)
 speed.c = scale(cars$speed, center = TRUE, scale = FALSE)
 model1 = lm(formula = dist~speed.c, data = cars)
@@ -165,54 +163,45 @@ summary(model1)
 ## Multiple R-squared:  0.6511,	Adjusted R-squared:  0.6438 
 ## F-statistic: 89.57 on 1 and 48 DF,  p-value: 1.49e-12
 ```
-##### fitted slope in Model1 is 3.932 feet with standard deviation of 0.415
-##### intercept of the line is 42.98 feet with standard deviation of 2.175
+##### fitted slope in Model1 is 3.932 with standard deviation of 0.415
+##### intercept of the line is 42.98 with standard deviation of 2.175
 
 
 ```r
 # Model2 
 #optimisation with log transformation of variable distance
-#variable speed centered around its mean to avoid nonesense negative values
 set.seed(1)
 speed.c = scale(cars$speed, center = TRUE, scale = FALSE)
-model2 = lm(formular = log(dist)~speed.c, data = cars)
-```
-
-```
-## Warning: In lm.fit(x, y, offset = offset, singular.ok = singular.ok, ...) :
-##  extra argument 'formular' will be disregarded
-```
-
-```r
+model2 = lm(formula = log(dist)~speed.c, data = cars)
 summary(model2)
 ```
 
 ```
 ## 
 ## Call:
-## lm(data = cars, formular = log(dist) ~ speed.c)
+## lm(formula = log(dist) ~ speed.c, data = cars)
 ## 
 ## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -7.5293 -2.1550  0.3615  2.4377  6.4179 
+##      Min       1Q   Median       3Q      Max 
+## -1.46604 -0.20800 -0.01683  0.24080  1.01519 
 ## 
 ## Coefficients:
 ##             Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)  8.28391    0.87438   9.474 1.44e-12 ***
-## dist         0.16557    0.01749   9.464 1.49e-12 ***
+## (Intercept)  3.53591    0.06312   56.02  < 2e-16 ***
+## speed.c      0.12077    0.01206   10.02 2.41e-13 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 3.156 on 48 degrees of freedom
-## Multiple R-squared:  0.6511,	Adjusted R-squared:  0.6438 
-## F-statistic: 89.57 on 1 and 48 DF,  p-value: 1.49e-12
+## Residual standard error: 0.4463 on 48 degrees of freedom
+## Multiple R-squared:  0.6763,	Adjusted R-squared:  0.6696 
+## F-statistic: 100.3 on 1 and 48 DF,  p-value: 2.413e-13
 ```
-##### fitted slope in Model2 is 0.1656 with standard deviation of 0.0175
-##### intercept of the line is 8.28 with standard deviation of 0.874
+##### fitted slope in Model2 is 0.120 with standard deviation of 0.012
+##### intercept of the line is 3.535 with standard deviation of 0.063
 
 
 
-##Task 6
+####Task 6
 
 ```r
 # Model1 plot
@@ -223,7 +212,7 @@ ggplot(cars, aes(x = speed, y = dist))+
   stat_smooth(method = lm, se = FALSE)
 ```
 
-![](Advanced_Bioinformatics_2019_assessment_files/figure-html/ggplot of data in task 5-1.png)<!-- -->
+![](Advanced_Bioinformatics_2019_assessment_Resubmission_files/figure-html/ggplot of data in task 5-1.png)<!-- -->
 
 ```r
 # Model2 plot
@@ -234,11 +223,11 @@ ggplot(cars, aes(x = speed, y = log(dist)) )+
   stat_smooth(method = lm, se = FALSE)
 ```
 
-![](Advanced_Bioinformatics_2019_assessment_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
+![](Advanced_Bioinformatics_2019_assessment_Resubmission_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
 
 
 
-Task 7
+####Task 7
 
 ```r
 library(dplyr)
@@ -276,43 +265,48 @@ str(carsM)
 ```
 
 ```r
-#now doing linear regression with new data to relate stopping distance to square of speed
+#now doing linear regression with new data to relate stopping distance to speed and square of speed
 set.seed(1)
-model3 = lm(formula = distM~I(speedM^2), data = carsM)
+model3 = lm(formula = distM~0 + speedM + I(speedM^2), data = carsM)
 summary(model3)
 ```
 
 ```
 ## 
 ## Call:
-## lm(formula = distM ~ I(speedM^2), data = carsM)
+## lm(formula = distM ~ 0 + speedM + I(speedM^2), data = carsM)
 ## 
 ## Residuals:
 ##        Min         1Q     Median         3Q        Max 
-## -0.0053878 -0.0017445 -0.0006807  0.0009614  0.0086860 
+## -0.0054614 -0.0017180 -0.0005970  0.0008655  0.0085201 
 ## 
 ## Coefficients:
-##              Estimate Std. Error t value Pr(>|t|)    
-## (Intercept) 1.678e-03  7.739e-04   2.168   0.0351 *  
-## I(speedM^2) 3.166e+02  3.236e+01   9.781  5.2e-13 ***
+##             Estimate Std. Error t value Pr(>|t|)   
+## speedM        0.8448     0.3818   2.213  0.03171 * 
+## I(speedM^2) 221.2497    72.1371   3.067  0.00355 **
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 0.00285 on 48 degrees of freedom
-## Multiple R-squared:  0.6659,	Adjusted R-squared:  0.6589 
-## F-statistic: 95.67 on 1 and 48 DF,  p-value: 5.2e-13
+## Residual standard error: 0.002845 on 48 degrees of freedom
+## Multiple R-squared:  0.9133,	Adjusted R-squared:  0.9097 
+## F-statistic: 252.8 on 2 and 48 DF,  p-value: < 2.2e-16
 ```
+
+####the estimated average reaction time which appears reasonable is 0.8448 seconds
+
+
 
 ```r
 #ggplot of data points and fitted reltionship is model3 plot
+
 library(ggplot2)
-ggplot(carsM, aes(x = speedM^2, y = distM))+
+ggplot(carsM, aes(x = speedM, y = distM))+
   geom_point()+
-  labs(x='Speed in miles per second squared', y='Stopping distance in miles', title='Plot of Model3 linear fit')+
-  stat_smooth(method = lm, se = FALSE)
+  geom_smooth (method="lm", formula = "y~0+x+I(x^2)")+
+  labs(x='Speed in miles per second', y='Stopping distance in miles', title='Plot of Model3 fitted relatioship')
 ```
 
-![](Advanced_Bioinformatics_2019_assessment_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
+![](Advanced_Bioinformatics_2019_assessment_Resubmission_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
 
 
 
